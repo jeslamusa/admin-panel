@@ -68,25 +68,49 @@ A modern, responsive admin panel built for Zanzpalm Real Estate to manage proper
 - Node.js (v14 or higher)
 - npm or yarn
 
-### Installation
-
+### Quick Start (HTML Version)
 1. **Clone the repository**
    ```bash
    git clone <repository-url>
    cd zanzpalm-admin-panel
    ```
 
-2. **Install dependencies**
+2. **Open in browser**
    ```bash
-   npm install
+   # Simply open admin.html in your browser
+   # Or use a local server
+   python -m http.server 8000
+   # Then navigate to http://localhost:8000/admin.html
    ```
 
-3. **Start the development server**
+### With Supabase Integration
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd zanzpalm-admin-panel
+   ```
+
+2. **Set up environment variables**
+   ```bash
+   cp env.example .env.local
+   # Edit .env.local with your Supabase credentials
+   ```
+
+3. **Install dependencies**
+   ```bash
+   npm install @supabase/supabase-js
+   ```
+
+4. **Set up database tables**
+   - See `SUPABASE_SETUP.md` for detailed database schema
+   - Run the SQL commands in your Supabase dashboard
+
+5. **Start the development server**
    ```bash
    npm start
    ```
 
-4. **Open your browser**
+6. **Open your browser**
    Navigate to `http://localhost:3000`
 
 ### Available Scripts
@@ -137,14 +161,44 @@ The modular structure makes it easy to add new features:
 - Add new pages in `src/pages/`
 - Update routing in `src/App.js`
 
+## 🔗 Supabase Integration
+
+This project includes full Supabase integration for database management. See `SUPABASE_SETUP.md` for detailed setup instructions.
+
+### Environment Variables
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://zaqodpokacrvkitqlsam.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
+
+### Database Tables
+- **Properties**: Full CRUD operations with all property details
+- **Clients**: Client management with types and status
+- **Agents**: Agent profiles and performance tracking
+- **Inquiries**: Lead management and tracking
+
+### Features
+- ✅ Real-time database operations
+- ✅ File upload support for images
+- ✅ Row Level Security (RLS)
+- ✅ Authentication ready
+- ✅ API examples included
+
 ## 📊 Data Management
 
-Currently, the application uses mock data for demonstration. To integrate with a backend:
+The application supports both mock data and real database integration:
 
-1. Replace mock data with API calls using Axios
-2. Implement proper state management (Redux, Context API, or Zustand)
-3. Add authentication and authorization
-4. Implement real-time updates using WebSockets
+### With Supabase (Recommended)
+- Real-time data synchronization
+- Secure API endpoints
+- File storage for images
+- User authentication
+- Row-level security
+
+### Mock Data (Development)
+- Quick setup for testing
+- No database required
+- Perfect for demonstrations
 
 ## 🔒 Security Considerations
 
