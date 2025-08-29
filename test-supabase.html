@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supabase Connection Test - Zanzpalm</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+        }
+        .test-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .test-button {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+            transition: transform 0.2s;
+        }
+        .test-button:hover {
+            transform: translateY(-2px);
+        }
+        .test-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .result {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .success {
+            border-left: 4px solid #4CAF50;
+        }
+        .error {
+            border-left: 4px solid #f44336;
+        }
+        .loading {
+            border-left: 4px solid #ff9800;
+        }
+        .status {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .status.success {
+            background: #4CAF50;
+            color: white;
+        }
+        .status.error {
+            background: #f44336;
+            color: white;
+        }
+        .status.loading {
+            background: #ff9800;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔗 Supabase Connection Test</h1>
+        <p style="text-align: center; margin-bottom: 30px;">Testing Zanzpalm Admin Panel Database Connection</p>
+
+        <div class="test-section">
+            <h3>📊 Connection Test</h3>
+            <button class="test-button" onclick="testConnection()">Test Supabase Connection</button>
+            <div id="connectionResult" class="result"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>🏠 Properties Table Test</h3>
+            <button class="test-button" onclick="testPropertiesTable()">Test Properties Table</button>
+            <button class="test-button" onclick="addTestProperty()">Add Test Property</button>
+            <button class="test-button" onclick="getProperties()">Get All Properties</button>
+            <div id="propertiesResult" class="result"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>👥 Clients Table Test</h3>
+            <button class="test-button" onclick="testClientsTable()">Test Clients Table</button>
+            <button class="test-button" onclick="addTestClient()">Add Test Client</button>
+            <button class="test-button" onclick="getClients()">Get All Clients</button>
+            <div id="clientsResult" class="result"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>👨‍💼 Agents Table Test</h3>
+            <button class="test-button" onclick="testAgentsTable()">Test Agents Table</button>
+            <button class="test-button" onclick="addTestAgent()">Add Test Agent</button>
+            <button class="test-button" onclick="getAgents()">Get All Agents</button>
+            <div id="agentsResult" class="result"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>📞 Inquiries Table Test</h3>
+            <button class="test-button" onclick="testInquiriesTable()">Test Inquiries Table</button>
+            <button class="test-button" onclick="addTestInquiry()">Add Test Inquiry</button>
+            <button class="test-button" onclick="getInquiries()">Get All Inquiries</button>
+            <div id="inquiriesResult" class="result"></div>
+        </div>
+    </div>
+
+    <!-- Supabase JavaScript Client -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    
+    <script>
+        // Supabase Configuration
+        const SUPABASE_URL = 'https://zaqodpokacrvkitqlsam.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InphcW9kcG9rYWNydmtpdHFsc2FtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYxMzU4OTQsImV4cCI6MjA3MTcxMTg5NH0.bSDJfgnfJGYTrQrrmuQJj2J_2IVex4UrQeTNYYKbIt0';
+
+        // Initialize Supabase client
+        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // Utility function to display results
+        function displayResult(elementId, data, isError = false) {
+            const element = document.getElementById(elementId);
+            const timestamp = new Date().toLocaleTimeString();
+            const status = isError ? 'error' : 'success';
+            
+            element.innerHTML = `
+                <span class="status ${status}">${isError ? '❌ ERROR' : '✅ SUCCESS'}</span>
+                <span style="color: #ccc;">[${timestamp}]</span>
+                \n${JSON.stringify(data, null, 2)}
+            `;
+            element.className = `result ${status}`;
+        }
+
+        // Test basic connection
+        async function testConnection() {
+            const resultElement = document.getElementById('connectionResult');
+            resultElement.innerHTML = '<span class="status loading">⏳ TESTING...</span>';
+            resultElement.className = 'result loading';
+
+            try {
+                // Test connection by getting current user (should work even if not authenticated)
+                const { data, error } = await supabase.auth.getUser();
+                
+                if (error && error.message !== 'Invalid JWT') {
+                    throw error;
+                }
+
+                const connectionInfo = {
+                    status: 'Connected',
+                    url: SUPABASE_URL,
+                    timestamp: new Date().toISOString(),
+                    message: 'Supabase connection successful!'
+                };
+
+                displayResult('connectionResult', connectionInfo);
+            } catch (error) {
+                displayResult('connectionResult', {
+                    status: 'Connection Failed',
+                    error: error.message,
+                    timestamp: new Date().toISOString()
+                }, true);
+            }
+        }
+
+        // Test Properties Table
+        async function testPropertiesTable() {
+            try {
+                const { data, error } = await supabase
+                    .from('properties')
+                    .select('count')
+                    .limit(1);
+
+                if (error) throw error;
+
+                displayResult('propertiesResult', {
+                    status: 'Properties table accessible',
+                    count: data.length,
+                    message: 'Properties table is working correctly'
+                });
+            } catch (error) {
+                displayResult('propertiesResult', {
+                    status: 'Properties table error',
+                    error: error.message,
+                    hint: 'Make sure the properties table exists in your Supabase database'
+                }, true);
+            }
+        }
+
+        // Add test property
+        async function addTestProperty() {
+            try {
+                const testProperty = {
+                    title: 'Test Property - ' + new Date().toLocaleTimeString(),
+                    description: 'This is a test property for connection verification',
+                    location: 'zanzibar',
+                    specific_location: 'Stone Town',
+                    property_type: 'villa',
+                    status: 'for-sale',
+                    featured: false,
+                    price: 500000,
+                    price_currency: 'USD',
+                    area: 200,
+                    area_unit: 'sqm',
+                    bedrooms: 3,
+                    bathrooms: 2
+                };
+
+                const { data, error } = await supabase
+                    .from('properties')
+                    .insert([testProperty])
+                    .select();
+
+                if (error) throw error;
+
+                displayResult('propertiesResult', {
+                    status: 'Test property added successfully',
+                    property: data[0],
+                    message: 'Property created with ID: ' + data[0].id
+                });
+            } catch (error) {
+                displayResult('propertiesResult', {
+                    status: 'Failed to add test property',
+                    error: error.message
+                }, true);
+            }
+        }
+
+        // Get all properties
+        async function getProperties() {
+            try {
+                const { data, error } = await supabase
+                    .from('properties')
+                    .select('*')
+                    .order('created_at', { ascending: false })
+                    .limit(10);
+
+                if (error) throw error;
+
+                displayResult('propertiesResult', {
+                    status: 'Properties retrieved successfully',
+                    count: data.length,
+                    properties: data
+                });
+            } catch (error) {
+                displayResult('propertiesResult', {
+                    status: 'Failed to get properties',
+                    error: error.message
+                }, true);
+            }
+        }
+
+        // Test Clients Table
+        async function testClientsTable() {
+            try {
+                const { data, error } = await supabase
+                    .from('clients')
+                    .select('count')
+                    .limit(1);
+
+                if (error) throw error;
+
+                displayResult('clientsResult', {
+                    status: 'Clients table accessible',
+                    count: data.length,
+                    message: 'Clients table is working correctly'
+                });
+            } catch (error) {
+                displayResult('clientsResult', {
+                    status: 'Clients table error',
+                    error: error.message,
+                    hint: 'Make sure the clients table exists in your Supabase database'
+                }, true);
+            }
+        }
+
+        // Add test client
+        async function addTestClient() {
+            try {
+                const testClient = {
+                    name: 'Test Client - ' + new Date().toLocaleTimeString(),
+                    email: 'test@example.com',
+                    phone: '+255123456789',
+                    type: 'buyer',
+                    status: 'active',
+                    budget: 750000
+                };
+
+                const { data, error } = await supabase
+                    .from('clients')
+                    .insert([testClient])
+                    .select();
+
+                if (error) throw error;
+
+                displayResult('clientsResult', {
+                    status: 'Test client added successfully',
+                    client: data[0],
+                    message: 'Client created with ID: ' + data[0].id
+                });
+            } catch (error) {
+                displayResult('clientsResult', {
+                    status: 'Failed to add test client',
+                    error: error.message
+                }, true);
+            }
+        }
+
+        // Get all clients
+        async function getClients() {
+            try {
+                const { data, error } = await supabase
+                    .from('clients')
+                    .select('*')
+                    .order('created_at', { ascending: false })
+                    .limit(10);
+
+                if (error) throw error;
+
+                displayResult('clientsResult', {
+                    status: 'Clients retrieved successfully',
+                    count: data.length,
+                    clients: data
+                });
+            } catch (error) {
+                displayResult('clientsResult', {
+                    status: 'Failed to get clients',
+                    error: error.message
+                }, true);
+            }
+        }
+
+        // Test Agents Table
+        async function testAgentsTable() {
+            try {
+                const { data, error } = await supabase
+                    .from('agents')
+                    .select('count')
+                    .limit(1);
+
+                if (error) throw error;
+
+                displayResult('agentsResult', {
+                    status: 'Agents table accessible',
+                    count: data.length,
+                    message: 'Agents table is working correctly'
+                });
+            } catch (error) {
+                displayResult('agentsResult', {
+                    status: 'Agents table error',
+                    error: error.message,
+                    hint: 'Make sure the agents table exists in your Supabase database'
+                }, true);
+            }
+        }
+
+        // Add test agent
+        async function addTestAgent() {
+            try {
+                const testAgent = {
+                    name: 'Test Agent - ' + new Date().toLocaleTimeString(),
+                    email: 'agent@example.com',
+                    phone: '+255987654321',
+                    position: 'Senior Agent',
+                    status: 'active',
+                    properties_count: 0,
+                    sales_count: 0
+                };
+
+                const { data, error } = await supabase
+                    .from('agents')
+                    .insert([testAgent])
+                    .select();
+
+                if (error) throw error;
+
+                displayResult('agentsResult', {
+                    status: 'Test agent added successfully',
+                    agent: data[0],
+                    message: 'Agent created with ID: ' + data[0].id
+                });
+            } catch (error) {
+                displayResult('agentsResult', {
+                    status: 'Failed to add test agent',
+                    error: error.message
+                }, true);
+            }
+        }
+
+        // Get all agents
+        async function getAgents() {
+            try {
+                const { data, error } = await supabase
+                    .from('agents')
+                    .select('*')
+                    .order('created_at', { ascending: false })
+                    .limit(10);
+
+                if (error) throw error;
+
+                displayResult('agentsResult', {
+                    status: 'Agents retrieved successfully',
+                    count: data.length,
+                    agents: data
+                });
+            } catch (error) {
+                displayResult('agentsResult', {
+                    status: 'Failed to get agents',
+                    error: error.message
+                }, true);
+            }
+        }
+
+        // Test Inquiries Table
+        async function testInquiriesTable() {
+            try {
+                const { data, error } = await supabase
+                    .from('inquiries')
+                    .select('count')
+                    .limit(1);
+
+                if (error) throw error;
+
+                displayResult('inquiriesResult', {
+                    status: 'Inquiries table accessible',
+                    count: data.length,
+                    message: 'Inquiries table is working correctly'
+                });
+            } catch (error) {
+                displayResult('inquiriesResult', {
+                    status: 'Inquiries table error',
+                    error: error.message,
+                    hint: 'Make sure the inquiries table exists in your Supabase database'
+                }, true);
+            }
+        }
+
+        // Add test inquiry
+        async function addTestInquiry() {
+            try {
+                const testInquiry = {
+                    customer_name: 'Test Customer - ' + new Date().toLocaleTimeString(),
+                    customer_email: 'customer@example.com',
+                    type: 'property_inquiry',
+                    status: 'new',
+                    message: 'This is a test inquiry for connection verification'
+                };
+
+                const { data, error } = await supabase
+                    .from('inquiries')
+                    .insert([testInquiry])
+                    .select();
+
+                if (error) throw error;
+
+                displayResult('inquiriesResult', {
+                    status: 'Test inquiry added successfully',
+                    inquiry: data[0],
+                    message: 'Inquiry created with ID: ' + data[0].id
+                });
+            } catch (error) {
+                displayResult('inquiriesResult', {
+                    status: 'Failed to add test inquiry',
+                    error: error.message
+                }, true);
+            }
+        }
+
+        // Get all inquiries
+        async function getInquiries() {
+            try {
+                const { data, error } = await supabase
+                    .from('inquiries')
+                    .select('*')
+                    .order('created_at', { ascending: false })
+                    .limit(10);
+
+                if (error) throw error;
+
+                displayResult('inquiriesResult', {
+                    status: 'Inquiries retrieved successfully',
+                    count: data.length,
+                    inquiries: data
+                });
+            } catch (error) {
+                displayResult('inquiriesResult', {
+                    status: 'Failed to get inquiries',
+                    error: error.message
+                }, true);
+            }
+        }
+
+        // Auto-test connection on page load
+        window.onload = function() {
+            console.log('🔗 Supabase Test Page Loaded');
+            console.log('URL:', SUPABASE_URL);
+            console.log('Testing connection...');
+            testConnection();
+        };
+    </script>
+</body>
+</html>
