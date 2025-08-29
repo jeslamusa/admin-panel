@@ -181,7 +181,7 @@
                     </div>
                     <div class="form-group">
                         <label for="location">Location <span class="required">*</span></label>
-                        <select id="location" name="location" required>
+                        <select id="location" name="location" required onchange="updateSpecificLocation()">
                             <option value="">Select Location</option>
                             <option value="zanzibar">Zanzibar</option>
                             <option value="arusha">Arusha</option>
@@ -189,7 +189,9 @@
                     </div>
                     <div class="form-group">
                         <label for="specific_location">Specific Location <span class="required">*</span></label>
-                        <input type="text" id="specific_location" name="specific_location" placeholder="e.g., Paje, Arusha City" required>
+                        <select id="specific_location" name="specific_location" required>
+                            <option value="">Select Location First</option>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label for="property_type">Property Type <span class="required">*</span></label>
@@ -361,6 +363,74 @@
     </div>
 
     <script>
+        // Location data with districts
+        const locationData = {
+            zanzibar: [
+                'Stone Town',
+                'Paje',
+                'Nungwi',
+                'Kendwa',
+                'Jambiani',
+                'Bwejuu',
+                'Michamvi',
+                'Kizimkazi',
+                'Matemwe',
+                'Pongwe',
+                'Uroa',
+                'Mangapwani',
+                'Chwaka',
+                'Makunduchi',
+                'Kiwengwa',
+                'Mkokotoni',
+                'Nungwi Beach',
+                'Kendwa Rocks',
+                'Jambiani Beach',
+                'Bwejuu Beach'
+            ],
+            arusha: [
+                'Arusha City',
+                'Arusha District',
+                'Meru District',
+                'Monduli District',
+                'Longido District',
+                'Ngorongoro District',
+                'Karatu District',
+                'Mbulu District',
+                'Babati District',
+                'Hanang District',
+                'Kiteto District',
+                'Simanjiro District',
+                'Kilimanjaro Region',
+                'Usa River',
+                'Tengeru',
+                'Ngaramtoni',
+                'Sakina',
+                'Themi',
+                'Sanawari',
+                'Moshono'
+            ]
+        };
+
+        // Update specific location dropdown based on selected location
+        function updateSpecificLocation() {
+            const locationSelect = document.getElementById('location');
+            const specificLocationSelect = document.getElementById('specific_location');
+            const selectedLocation = locationSelect.value;
+            
+            // Clear current options
+            specificLocationSelect.innerHTML = '<option value="">Select Specific Location</option>';
+            
+            if (selectedLocation && locationData[selectedLocation]) {
+                // Add new options based on selected location
+                locationData[selectedLocation].forEach(district => {
+                    const option = document.createElement('option');
+                    option.value = district.toLowerCase().replace(/\s+/g, '-');
+                    option.textContent = district;
+                    specificLocationSelect.appendChild(option);
+                });
+            }
+        }
+
         // File upload preview
         document.getElementById('images').addEventListener('change', function(e) {
             const preview = document.getElementById('image-preview');
