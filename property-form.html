@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zanzpalm - Add Property</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .form-section h3 {
+            color: #667eea;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .required {
+            color: red;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+        }
+
+        .file-upload {
+            border: 2px dashed #ddd;
+            padding: 20px;
+            text-align: center;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .file-upload:hover {
+            border-color: #667eea;
+        }
+
+        .btn {
+            background: #667eea;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background: #5a6fd8;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .amenities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+        }
+
+        .coordinates-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            .coordinates-group {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Add New Property - Zanzpalm</h1>
+        
+        <div id="message"></div>
+        
+        <form id="property-form" onsubmit="handleSubmit(event)">
+            <!-- Basic Information -->
+            <div class="form-section">
+                <h3>Basic Information</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="title">Property Title <span class="required">*</span></label>
+                        <input type="text" id="title" name="title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="location">Location <span class="required">*</span></label>
+                        <select id="location" name="location" required>
+                            <option value="">Select Location</option>
+                            <option value="zanzibar">Zanzibar</option>
+                            <option value="arusha">Arusha</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="specific_location">Specific Location <span class="required">*</span></label>
+                        <input type="text" id="specific_location" name="specific_location" placeholder="e.g., Paje, Arusha City" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="property_type">Property Type <span class="required">*</span></label>
+                        <select id="property_type" name="property_type" required>
+                            <option value="">Select Type</option>
+                            <option value="beachfront">Beachfront</option>
+                            <option value="plot">Plot</option>
+                            <option value="farmland">Farmland</option>
+                            <option value="apartment">Apartment</option>
+                            <option value="hotel">Hotel</option>
+                            <option value="lodge">Lodge</option>
+                            <option value="resort">Resort</option>
+                            <option value="unfurnished-dev">Unfurnished Development</option>
+                            <option value="villa">Villa</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="status">Status <span class="required">*</span></label>
+                        <select id="status" name="status" required>
+                            <option value="">Select Status</option>
+                            <option value="for-rent">For Rent</option>
+                            <option value="for-sale">For Sale</option>
+                            <option value="reserved">Reserved</option>
+                            <option value="sold">Sold</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="featured" name="featured">
+                            <label for="featured">Featured Property</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="description">Description <span class="required">*</span></label>
+                    <textarea id="description" name="description" rows="4" required></textarea>
+                </div>
+            </div>
+
+            <!-- Pricing & Measurements -->
+            <div class="form-section">
+                <h3>Pricing & Measurements</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="price">Price <span class="required">*</span></label>
+                        <input type="number" id="price" name="price" min="0" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="price_currency">Currency</label>
+                        <select id="price_currency" name="price_currency">
+                            <option value="USD">USD</option>
+                            <option value="EUR">EUR</option>
+                            <option value="TZS">TZS</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="area">Area <span class="required">*</span></label>
+                        <input type="number" id="area" name="area" min="0" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="area_unit">Area Unit</label>
+                        <select id="area_unit" name="area_unit">
+                            <option value="sqm">Square Meters (sqm)</option>
+                            <option value="sqft">Square Feet (sqft)</option>
+                            <option value="acres">Acres</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="bedrooms">Bedrooms</label>
+                        <input type="number" id="bedrooms" name="bedrooms" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="bathrooms">Bathrooms</label>
+                        <input type="number" id="bathrooms" name="bathrooms" min="0">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Media & Files -->
+            <div class="form-section">
+                <h3>Media & Files</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="images">Property Images <span class="required">*</span></label>
+                        <div class="file-upload" onclick="document.getElementById('images').click()">
+                            <p>📷 Click to upload multiple images</p>
+                            <input type="file" id="images" name="images" multiple accept="image/*" style="display: none;">
+                        </div>
+                        <div id="image-preview"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="floor_plan">Floor Plan</label>
+                        <div class="file-upload" onclick="document.getElementById('floor_plan').click()">
+                            <p>📐 Click to upload floor plan</p>
+                            <input type="file" id="floor_plan" name="floor_plan" accept="image/*" style="display: none;">
+                        </div>
+                        <div id="floor-plan-preview"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="video_url">Video URL</label>
+                        <input type="url" id="video_url" name="video_url" placeholder="https://youtube.com/watch?v=...">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Details -->
+            <div class="form-section">
+                <h3>Additional Details</h3>
+                <div class="form-group">
+                    <label>Amenities</label>
+                    <div class="amenities-grid">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="pool" name="amenities" value="Private Pool">
+                            <label for="pool">Private Pool</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="security" name="amenities" value="Security System">
+                            <label for="security">Security System</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="garden" name="amenities" value="Garden">
+                            <label for="garden">Garden</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="parking" name="amenities" value="Parking">
+                            <label for="parking">Parking</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="wifi" name="amenities" value="WiFi">
+                            <label for="wifi">WiFi</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="ac" name="amenities" value="Air Conditioning">
+                            <label for="ac">Air Conditioning</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="kitchen" name="amenities" value="Fully Equipped Kitchen">
+                            <label for="kitchen">Fully Equipped Kitchen</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="beach" name="amenities" value="Beach Access">
+                            <label for="beach">Beach Access</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="view" name="amenities" value="Ocean View">
+                            <label for="view">Ocean View</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="furnished" name="amenities" value="Furnished">
+                            <label for="furnished">Furnished</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Coordinates (Optional)</label>
+                    <div class="coordinates-group">
+                        <input type="number" id="latitude" name="latitude" step="any" placeholder="Latitude">
+                        <input type="number" id="longitude" name="longitude" step="any" placeholder="Longitude">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form Actions -->
+            <div style="text-align: center; margin-top: 30px;">
+                <button type="button" class="btn btn-secondary" onclick="resetForm()">Reset Form</button>
+                <button type="submit" class="btn">Add Property</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // File upload preview
+        document.getElementById('images').addEventListener('change', function(e) {
+            const preview = document.getElementById('image-preview');
+            preview.innerHTML = '';
+            
+            for (let file of e.target.files) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.style.width = '100px';
+                    img.style.height = '100px';
+                    img.style.objectFit = 'cover';
+                    img.style.margin = '5px';
+                    img.style.borderRadius = '5px';
+                    preview.appendChild(img);
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        document.getElementById('floor_plan').addEventListener('change', function(e) {
+            const preview = document.getElementById('floor-plan-preview');
+            preview.innerHTML = '';
+            
+            if (e.target.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.style.width = '200px';
+                    img.style.height = 'auto';
+                    img.style.borderRadius = '5px';
+                    preview.appendChild(img);
+                }
+                reader.readAsDataURL(e.target.files[0]);
+            }
+        });
+
+        // Form submission
+        function handleSubmit(event) {
+            event.preventDefault();
+            
+            const formData = new FormData(event.target);
+            const data = {};
+            
+            // Convert FormData to object
+            for (let [key, value] of formData.entries()) {
+                if (key === 'amenities') {
+                    if (!data[key]) data[key] = [];
+                    data[key].push(value);
+                } else {
+                    data[key] = value;
+                }
+            }
+            
+            // Handle checkbox values
+            data.featured = formData.has('featured');
+            
+            // Validate required fields
+            const required = ['title', 'location', 'specific_location', 'property_type', 'status', 'description', 'price', 'area'];
+            for (let field of required) {
+                if (!data[field]) {
+                    showMessage('Please fill in all required fields', 'error');
+                    return;
+                }
+            }
+            
+            // Check if images are uploaded
+            const images = document.getElementById('images').files;
+            if (images.length === 0) {
+                showMessage('Please upload at least one property image', 'error');
+                return;
+            }
+            
+            // Here you would send the data to your Supabase backend
+            console.log('Property data to submit:', data);
+            
+            // Simulate API call
+            showMessage('Submitting property...', 'success');
+            setTimeout(() => {
+                showMessage('Property added successfully! Redirecting to properties list...', 'success');
+                setTimeout(() => {
+                    window.location.href = 'admin.html#properties';
+                }, 2000);
+            }, 1000);
+        }
+
+        function showMessage(message, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.innerHTML = `<div class="message ${type}">${message}</div>`;
+        }
+
+        function resetForm() {
+            document.getElementById('property-form').reset();
+            document.getElementById('image-preview').innerHTML = '';
+            document.getElementById('floor-plan-preview').innerHTML = '';
+            document.getElementById('message').innerHTML = '';
+        }
+    </script>
+</body>
+</html>
