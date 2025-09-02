@@ -1650,8 +1650,11 @@
     </div>
 
     <script>
-        // Mobile Menu Toggle Function
-        function toggleMobileMenu() {
+        // Debug: Check if script is loading
+        console.log('🚀 Admin panel script loaded successfully!');
+        
+        // Make functions globally accessible
+        window.toggleMobileMenu = function() {
             console.log('Mobile menu toggle clicked!');
             const sidebar = document.getElementById('sidebar');
             const mobileToggle = document.querySelector('.mobile-menu-toggle');
@@ -1665,7 +1668,7 @@
             } else {
                 console.error('Sidebar not found!');
             }
-        }
+        };
 
         // Close mobile menu when clicking outside
         document.addEventListener('click', function(event) {
@@ -1750,7 +1753,7 @@
         });
 
         // Add Property Function
-        function addProperty() {
+        window.addProperty = function() {
             console.log('Add property clicked!');
             // Navigate to property form - handle both local and Vercel deployment
             const currentUrl = window.location.href;
@@ -1761,10 +1764,10 @@
                 // Local development
                 window.location.href = 'property-form.html';
             }
-        }
+        };
 
         // Set Mobile Navigation Active State
-        function setMobileNavActive(clickedItem) {
+        window.setMobileNavActive = function(clickedItem) {
             // Remove active class from all mobile nav items
             document.querySelectorAll('.mobile-nav-item').forEach(item => {
                 item.classList.remove('active');
@@ -1772,9 +1775,9 @@
             
             // Add active class to clicked item
             clickedItem.classList.add('active');
-        }
+        };
 
-        function showSection(sectionId) {
+        window.showSection = function(sectionId) {
             // Hide all sections
             const sections = document.querySelectorAll('.content-section');
             sections.forEach(section => section.classList.remove('active'));
@@ -1815,7 +1818,7 @@
         }
 
         // Edit Profile Functions
-        function openEditProfileModal() {
+        window.openEditProfileModal = function() {
             // Create modal HTML
             const modalHTML = `
                 <div id="editProfileModal" style="
@@ -1875,14 +1878,14 @@
             document.body.insertAdjacentHTML('beforeend', modalHTML);
         }
 
-        function closeEditProfileModal() {
+        window.closeEditProfileModal = function() {
             const modal = document.getElementById('editProfileModal');
             if (modal) {
                 modal.remove();
             }
-        }
+        };
 
-        function saveProfileChanges(event) {
+        window.saveProfileChanges = function(event) {
             event.preventDefault();
             
             const name = document.getElementById('profile-name').value;
@@ -1906,7 +1909,7 @@
             showSettingsMessage('Profile updated successfully!', 'success');
         }
 
-        function saveNotificationSettings() {
+        window.saveNotificationSettings = function() {
             const emailNotifications = document.getElementById('email-notifications').checked;
             const smsNotifications = document.getElementById('sms-notifications').checked;
             const newInquiries = document.getElementById('new-inquiries').checked;
@@ -1923,7 +1926,7 @@
             showSettingsMessage('Notification settings saved successfully!', 'success');
         }
 
-        function showSettingsMessage(message, type) {
+        window.showSettingsMessage = function(message, type) {
             const messageDiv = document.getElementById('settings-message');
             const messageHTML = `
                 <div style="
@@ -1951,7 +1954,7 @@
         let currentDeleteType = null;
         let deletedItems = [];
 
-        function confirmDelete(itemName, type) {
+        window.confirmDelete = function(itemName, type) {
             currentDeleteItem = itemName;
             currentDeleteType = type;
             
@@ -1962,13 +1965,13 @@
             modal.style.display = 'flex';
         }
 
-        function closeDeleteModal() {
+        window.closeDeleteModal = function() {
             document.getElementById('deleteModal').style.display = 'none';
             currentDeleteItem = null;
             currentDeleteType = null;
         }
 
-        function performDelete() {
+        window.performDelete = function() {
             if (!currentDeleteItem || !currentDeleteType) return;
             
             // Store deleted item for undo functionality
@@ -2012,7 +2015,7 @@
             }, 10000);
         }
 
-        function undoDelete(itemName, type) {
+        window.undoDelete = function(itemName, type) {
             // Remove from deleted items array
             deletedItems = deletedItems.filter(item => 
                 !(item.name === itemName && item.type === type)
@@ -2066,7 +2069,7 @@
         }
 
         // View Property Function
-        function viewProperty(title, type, location, price, status, featured, description) {
+        window.viewProperty = function(title, type, location, price, status, featured, description) {
             const modal = document.getElementById('viewModal');
             const detailsDiv = document.getElementById('propertyDetails');
             
@@ -2109,12 +2112,12 @@
             modal.style.display = 'flex';
         }
 
-        function closeViewModal() {
+        window.closeViewModal = function() {
             document.getElementById('viewModal').style.display = 'none';
         }
 
         // Edit Property Function
-        function editProperty(title, type, location, price, status, featured, description) {
+        window.editProperty = function(title, type, location, price, status, featured, description) {
             const modal = document.getElementById('editModal');
             
             // Populate form fields
@@ -2129,11 +2132,11 @@
             modal.style.display = 'flex';
         }
 
-        function closeEditModal() {
+        window.closeEditModal = function() {
             document.getElementById('editModal').style.display = 'none';
         }
 
-        function savePropertyChanges(event) {
+        window.savePropertyChanges = function(event) {
             event.preventDefault();
             
             const title = document.getElementById('edit-title').value;
@@ -2168,7 +2171,7 @@
             }, 5000);
         }
 
-        function logout() {
+        window.logout = function() {
             if (confirm('Are you sure you want to logout?')) {
                 // Here you would typically clear session/tokens
                 alert('Logged out successfully!');
@@ -2177,8 +2180,23 @@
             }
         }
 
+        // Test function to verify all functions are accessible
+        window.testFunctions = function() {
+            console.log('🧪 Testing all functions...');
+            console.log('addProperty:', typeof window.addProperty);
+            console.log('showSection:', typeof window.showSection);
+            console.log('editProperty:', typeof window.editProperty);
+            console.log('viewProperty:', typeof window.viewProperty);
+            console.log('confirmDelete:', typeof window.confirmDelete);
+            console.log('openEditProfileModal:', typeof window.openEditProfileModal);
+            console.log('All functions should be functions, not undefined');
+        };
+
         // Handle hash navigation on page load
         window.addEventListener('load', function() {
+            console.log('📱 Page loaded, testing functions...');
+            window.testFunctions();
+            
             const hash = window.location.hash.substring(1);
             if (hash && hash !== 'dashboard') {
                 showSection(hash);
