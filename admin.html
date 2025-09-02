@@ -122,6 +122,47 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
 
+        /* Mobile Navigation Bar */
+        .mobile-nav-bar {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 15px 10px;
+            z-index: 1000;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.2);
+        }
+
+        .mobile-nav-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .mobile-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: white;
+            text-decoration: none;
+            font-size: 12px;
+            padding: 8px 5px;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+        }
+
+        .mobile-nav-item:hover,
+        .mobile-nav-item.active {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .mobile-nav-item i {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
         /* Floating Action Button for Mobile */
         .mobile-fab {
             display: none;
@@ -202,6 +243,18 @@
                 display: block !important;
                 visibility: visible !important;
                 opacity: 1 !important;
+            }
+
+            /* Show mobile navigation bar */
+            .mobile-nav-bar {
+                display: block !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+            }
+
+            /* Add bottom padding to main content for mobile nav */
+            .main-content {
+                padding-bottom: 100px;
             }
 
             .header {
@@ -866,6 +919,28 @@
         <button class="mobile-fab" onclick="addProperty()" title="Add New Property">
             <i class="fas fa-plus"></i>
         </button>
+        
+        <!-- Mobile Bottom Navigation Bar -->
+        <div class="mobile-nav-bar" id="mobileNavBar">
+            <div class="mobile-nav-grid">
+                <a href="#dashboard" class="mobile-nav-item active" onclick="showSection('dashboard'); setMobileNavActive(this)">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#properties" class="mobile-nav-item" onclick="showSection('properties'); setMobileNavActive(this)">
+                    <i class="fas fa-home"></i>
+                    <span>Properties</span>
+                </a>
+                <a href="#clients" class="mobile-nav-item" onclick="showSection('clients'); setMobileNavActive(this)">
+                    <i class="fas fa-users"></i>
+                    <span>Clients</span>
+                </a>
+                <a href="#agents" class="mobile-nav-item" onclick="showSection('agents'); setMobileNavActive(this)">
+                    <i class="fas fa-user-tie"></i>
+                    <span>Agents</span>
+                </a>
+            </div>
+        </div>
         
         <!-- Sidebar -->
         <nav class="sidebar" id="sidebar">
@@ -1539,6 +1614,17 @@
             window.location.href = 'property-form.html';
         }
 
+        // Set Mobile Navigation Active State
+        function setMobileNavActive(clickedItem) {
+            // Remove active class from all mobile nav items
+            document.querySelectorAll('.mobile-nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Add active class to clicked item
+            clickedItem.classList.add('active');
+        }
+
         function showSection(sectionId) {
             // Hide all sections
             const sections = document.querySelectorAll('.content-section');
@@ -1547,9 +1633,19 @@
             // Show selected section
             document.getElementById(sectionId).classList.add('active');
 
-            // Update navigation
+            // Update sidebar navigation
             const navLinks = document.querySelectorAll('.nav-link');
             navLinks.forEach(link => link.classList.remove('active'));
+
+            // Update mobile navigation
+            const mobileNavItems = document.querySelectorAll('.mobile-nav-item');
+            mobileNavItems.forEach(item => item.classList.remove('active'));
+            
+            // Find and activate corresponding mobile nav item
+            const mobileNavItem = document.querySelector(`[href="#${sectionId}"]`);
+            if (mobileNavItem) {
+                mobileNavItem.classList.add('active');
+            }
 
             // Update page title
             const titles = {
@@ -1564,7 +1660,9 @@
             document.getElementById('page-title').textContent = titles[sectionId];
 
             // Add active class to clicked link
-            event.target.classList.add('active');
+            if (event && event.target) {
+                event.target.classList.add('active');
+            }
         }
 
         // Edit Profile Functions
