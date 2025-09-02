@@ -115,3 +115,4 @@ Works in all modern browsers:
 ## Support
 
 This admin panel is ready to use immediately. Simply open the HTML files in your browser to start managing properties!
+

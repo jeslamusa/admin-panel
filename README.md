@@ -83,6 +83,28 @@ A modern, responsive admin panel built for Zanzpalm Real Estate to manage proper
    # Then navigate to http://localhost:8000/admin.html
    ```
 
+### 🌐 Deploy to Vercel (Recommended)
+1. **Quick Deploy**
+   - Go to [vercel.com](https://vercel.com)
+   - Import your GitHub repository: `jeslamusa/admin-panel`
+   - Set environment variables for Supabase
+   - Click Deploy!
+
+2. **CLI Deploy**
+   ```bash
+   # Install Vercel CLI
+   npm install -g vercel
+   
+   # Deploy
+   vercel --prod
+   ```
+
+3. **Windows Batch Deploy**
+   ```bash
+   # Run the deployment script
+   deploy.bat
+   ```
+
 ### With Supabase Integration
 1. **Clone the repository**
    ```bash
@@ -228,16 +250,38 @@ The project includes testing setup with:
 
 ## 📦 Deployment
 
-### Build for Production
+### 🚀 Vercel Deployment (Recommended)
+
+Your admin panel is optimized for Vercel deployment with:
+
+- **Automatic routing** via `vercel.json`
+- **Environment variables** for Supabase
+- **Security headers** and HTTPS
+- **Global CDN** distribution
+- **Automatic deployments** on Git push
+
+#### Quick Deploy
+1. Go to [vercel.com](https://vercel.com)
+2. Import repository: `jeslamusa/admin-panel`
+3. Set environment variables
+4. Deploy! 🎉
+
+#### CLI Deploy
 ```bash
-npm run build
+npm install -g vercel
+vercel --prod
 ```
 
-### Deployment Options
-- **Netlify**: Drag and drop the `build` folder
-- **Vercel**: Connect your GitHub repository
-- **AWS S3**: Upload build files to S3 bucket
-- **Heroku**: Deploy using Heroku CLI
+#### Windows Batch Deploy
+```bash
+deploy.bat
+```
+
+### Other Deployment Options
+- **Netlify**: Drag and drop HTML files
+- **AWS S3**: Upload static files to S3 bucket
+- **GitHub Pages**: Push to gh-pages branch
+- **Traditional Hosting**: Upload files via FTP
 
 ## 🤝 Contributing
 

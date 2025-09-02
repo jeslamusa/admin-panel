@@ -230,3 +230,4 @@ admin-panel/
 ## 📞 Support
 
 For database-related issues, contact your database administrator or refer to the Supabase documentation.
+
