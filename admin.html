@@ -840,22 +840,125 @@
             .container {
                 flex-direction: column;
             }
+            
             .sidebar {
                 width: 100%;
+                position: fixed;
+                top: 0;
+                left: -100%;
+                height: 100vh;
+                z-index: 1000;
+                transition: left 0.3s ease;
+                overflow-y: auto;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             }
-            .dashboard-grid {
-                grid-template-columns: 1fr;
+
+            .sidebar.active {
+                left: 0;
             }
-            .modal-content {
-                width: 95%;
-                margin: 10% auto;
+
+            .mobile-menu-toggle {
+                display: block !important;
+                visibility: visible !important;
+                opacity: 1 !important;
             }
+
+            .mobile-fab {
+                display: block !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+            }
+
+            .mobile-nav-bar {
+                display: block !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 15px;
+                padding-top: 100px;
+                padding-bottom: 100px;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+
             .header-actions {
                 flex-direction: column;
                 gap: 10px;
             }
+
             .user-info {
+                flex-direction: column;
+                text-align: center;
+                padding: 15px;
+            }
+
+            .logout-btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .stat-number {
+                font-size: 32px;
+            }
+
+            .content-section {
+                padding: 15px;
+            }
+
+            .table-container {
+                overflow-x: auto;
+            }
+
+            .table {
+                min-width: 600px;
+            }
+
+            .table th,
+            .table td {
                 padding: 8px 12px;
+                font-size: 14px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .action-buttons button {
+                width: 100%;
+                margin: 2px 0;
+            }
+
+            .btn {
+                width: 100%;
+                text-align: center;
+                margin: 5px 0;
+            }
+
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
             }
         }
 
