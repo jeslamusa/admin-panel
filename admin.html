@@ -1055,7 +1055,7 @@
                     <a href="#dashboard" class="nav-link active" onclick="showSection('dashboard')">Dashboard</a>
                 </li>
                 <li class="nav-item">
-                    <a href="property-form.html" class="nav-link">Add Property</a>
+                    <a href="#" class="nav-link" onclick="addProperty()">Add Property</a>
                 </li>
                 <li class="nav-item">
                     <a href="#properties" class="nav-link" onclick="showSection('properties')">Properties</a>
@@ -1123,7 +1123,7 @@
                 <!-- Quick Actions -->
                 <div class="card">
                     <h3>Quick Actions</h3>
-                    <a href="property-form.html" class="btn btn-primary">➕ Add New Property</a>
+                    <a href="#" class="btn btn-primary" onclick="addProperty()">➕ Add New Property</a>
                     <a href="#properties" class="btn" onclick="showSection('properties')">View All Properties</a>
                     <a href="#clients" class="btn" onclick="showSection('clients')">Add New Client</a>
                 </div>
@@ -1752,8 +1752,15 @@
         // Add Property Function
         function addProperty() {
             console.log('Add property clicked!');
-            // Navigate to property form
-            window.location.href = 'property-form.html';
+            // Navigate to property form - handle both local and Vercel deployment
+            const currentUrl = window.location.href;
+            if (currentUrl.includes('vercel.app')) {
+                // On Vercel, use the rewrite route
+                window.location.href = '/property-form';
+            } else {
+                // Local development
+                window.location.href = 'property-form.html';
+            }
         }
 
         // Set Mobile Navigation Active State
