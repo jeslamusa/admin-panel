@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Zanzpalm Admin Panel</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -103,12 +106,20 @@
         /* Mobile Menu Toggle */
         .mobile-menu-toggle {
             display: none;
-            background: none;
+            background: rgba(0,0,0,0.8);
             border: none;
             color: white;
             font-size: 24px;
             cursor: pointer;
-            padding: 10px;
+            padding: 15px;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1001;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
 
         /* Responsive Design */
@@ -126,6 +137,7 @@
                 z-index: 1000;
                 transition: left 0.3s ease;
                 overflow-y: auto;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             }
 
             .sidebar.active {
@@ -133,24 +145,32 @@
             }
 
             .mobile-menu-toggle {
-                display: block;
+                display: block !important;
                 position: fixed;
                 top: 20px;
                 left: 20px;
                 z-index: 1001;
-                background: rgba(0,0,0,0.5);
+                background: rgba(0,0,0,0.8);
                 border-radius: 50%;
-                width: 50px;
-                height: 50px;
-                display: flex;
+                width: 60px;
+                height: 60px;
+                display: flex !important;
                 align-items: center;
                 justify-content: center;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.3);
             }
 
             .main-content {
                 margin-left: 0;
                 padding: 15px;
-                padding-top: 80px;
+                padding-top: 100px;
+            }
+
+            /* Ensure mobile menu is visible */
+            .mobile-menu-toggle {
+                display: block !important;
+                visibility: visible !important;
+                opacity: 1 !important;
             }
 
             .header {
@@ -1405,8 +1425,19 @@
     <script>
         // Mobile Menu Toggle Function
         function toggleMobileMenu() {
+            console.log('Mobile menu toggle clicked!');
             const sidebar = document.getElementById('sidebar');
-            sidebar.classList.toggle('active');
+            const mobileToggle = document.querySelector('.mobile-menu-toggle');
+            
+            console.log('Sidebar element:', sidebar);
+            console.log('Mobile toggle element:', mobileToggle);
+            
+            if (sidebar) {
+                sidebar.classList.toggle('active');
+                console.log('Sidebar classes after toggle:', sidebar.className);
+            } else {
+                console.error('Sidebar not found!');
+            }
         }
 
         // Close mobile menu when clicking outside
@@ -1426,6 +1457,23 @@
                     document.getElementById('sidebar').classList.remove('active');
                 }
             });
+        });
+
+        // Page load check for mobile
+        window.addEventListener('load', function() {
+            console.log('Page loaded!');
+            console.log('Window width:', window.innerWidth);
+            console.log('Mobile menu toggle element:', document.querySelector('.mobile-menu-toggle'));
+            console.log('Sidebar element:', document.getElementById('sidebar'));
+            
+            if (window.innerWidth <= 768) {
+                console.log('Mobile view detected');
+                const mobileToggle = document.querySelector('.mobile-menu-toggle');
+                if (mobileToggle) {
+                    mobileToggle.style.display = 'block';
+                    console.log('Mobile menu toggle made visible');
+                }
+            }
         });
 
         function showSection(sectionId) {
