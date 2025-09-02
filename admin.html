@@ -122,6 +122,30 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
 
+        /* Floating Action Button for Mobile */
+        .mobile-fab {
+            display: none;
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 28px;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .mobile-fab:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .container {
@@ -168,6 +192,13 @@
 
             /* Ensure mobile menu is visible */
             .mobile-menu-toggle {
+                display: block !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+            }
+
+            /* Show FAB on mobile */
+            .mobile-fab {
                 display: block !important;
                 visibility: visible !important;
                 opacity: 1 !important;
@@ -407,6 +438,19 @@
         .btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            font-weight: 700;
+            font-size: 16px;
+            padding: 15px 30px;
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #45a049 0%, #3d8b40 100%);
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.6);
         }
 
         .btn-secondary {
@@ -818,6 +862,11 @@
             <i class="fas fa-bars"></i>
         </button>
         
+        <!-- Mobile Floating Action Button -->
+        <button class="mobile-fab" onclick="addProperty()" title="Add New Property">
+            <i class="fas fa-plus"></i>
+        </button>
+        
         <!-- Sidebar -->
         <nav class="sidebar" id="sidebar">
             <div class="logo">
@@ -896,7 +945,7 @@
                 <!-- Quick Actions -->
                 <div class="card">
                     <h3>Quick Actions</h3>
-                    <a href="property-form.html" class="btn">Add New Property</a>
+                    <a href="property-form.html" class="btn btn-primary">➕ Add New Property</a>
                     <a href="#properties" class="btn" onclick="showSection('properties')">View All Properties</a>
                     <a href="#clients" class="btn" onclick="showSection('clients')">Add New Client</a>
                 </div>
@@ -1469,12 +1518,26 @@
             if (window.innerWidth <= 768) {
                 console.log('Mobile view detected');
                 const mobileToggle = document.querySelector('.mobile-menu-toggle');
+                const mobileFab = document.querySelector('.mobile-fab');
+                
                 if (mobileToggle) {
                     mobileToggle.style.display = 'block';
                     console.log('Mobile menu toggle made visible');
                 }
+                
+                if (mobileFab) {
+                    mobileFab.style.display = 'block';
+                    console.log('Mobile FAB made visible');
+                }
             }
         });
+
+        // Add Property Function
+        function addProperty() {
+            console.log('Add property clicked!');
+            // Navigate to property form
+            window.location.href = 'property-form.html';
+        }
 
         function showSection(sectionId) {
             // Hide all sections
