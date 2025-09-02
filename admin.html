@@ -921,7 +921,7 @@
         </button>
         
         <!-- Mobile Bottom Navigation Bar -->
-        <div class="mobile-nav-bar" id="mobileNavBar">
+        <div class="mobile-nav-bar" id="mobileNavBar" style="display: none;">
             <div class="mobile-nav-grid">
                 <a href="#dashboard" class="mobile-nav-item active" onclick="showSection('dashboard'); setMobileNavActive(this)">
                     <i class="fas fa-tachometer-alt"></i>
@@ -1585,26 +1585,65 @@
 
         // Page load check for mobile
         window.addEventListener('load', function() {
+            console.log('=== MOBILE DEBUG INFO ===');
             console.log('Page loaded!');
             console.log('Window width:', window.innerWidth);
-            console.log('Mobile menu toggle element:', document.querySelector('.mobile-menu-toggle'));
-            console.log('Sidebar element:', document.getElementById('sidebar'));
+            console.log('User agent:', navigator.userAgent);
+            
+            // Check all mobile elements
+            const mobileToggle = document.querySelector('.mobile-menu-toggle');
+            const mobileFab = document.querySelector('.mobile-fab');
+            const mobileNavBar = document.querySelector('.mobile-nav-bar');
+            const sidebar = document.getElementById('sidebar');
+            
+            console.log('Mobile menu toggle:', mobileToggle);
+            console.log('Mobile FAB:', mobileFab);
+            console.log('Mobile nav bar:', mobileNavBar);
+            console.log('Sidebar:', sidebar);
             
             if (window.innerWidth <= 768) {
-                console.log('Mobile view detected');
-                const mobileToggle = document.querySelector('.mobile-menu-toggle');
-                const mobileFab = document.querySelector('.mobile-fab');
+                console.log('🟢 Mobile view detected - showing mobile elements');
                 
+                // Force show mobile elements
                 if (mobileToggle) {
                     mobileToggle.style.display = 'block';
-                    console.log('Mobile menu toggle made visible');
+                    mobileToggle.style.visibility = 'visible';
+                    mobileToggle.style.opacity = '1';
+                    console.log('✅ Mobile menu toggle made visible');
                 }
                 
                 if (mobileFab) {
                     mobileFab.style.display = 'block';
-                    console.log('Mobile FAB made visible');
+                    mobileFab.style.visibility = 'visible';
+                    mobileFab.style.opacity = '1';
+                    console.log('✅ Mobile FAB made visible');
                 }
+                
+                if (mobileNavBar) {
+                    mobileNavBar.style.display = 'block';
+                    mobileNavBar.style.visibility = 'visible';
+                    mobileNavBar.style.opacity = '1';
+                    console.log('✅ Mobile nav bar made visible');
+                }
+            } else {
+                console.log('🟡 Desktop view detected');
             }
+            
+            // Add resize listener
+            window.addEventListener('resize', function() {
+                console.log('Window resized to:', window.innerWidth);
+                if (window.innerWidth <= 768) {
+                    console.log('🔄 Resized to mobile - showing mobile elements');
+                    if (mobileNavBar) mobileNavBar.style.display = 'block';
+                    if (mobileFab) mobileFab.style.display = 'block';
+                    if (mobileToggle) mobileToggle.style.display = 'block';
+                } else {
+                    console.log('🔄 Resized to desktop - hiding mobile elements');
+                    if (mobileNavBar) mobileNavBar.style.display = 'none';
+                    if (mobileFab) mobileFab.style.display = 'none';
+                    if (mobileToggle) mobileToggle.style.display = 'none';
+                }
+            });
         });
 
         // Add Property Function
