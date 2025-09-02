@@ -6,26 +6,22 @@
       "use": "@vercel/static"
     }
   ],
-  "routes": [
+  "rewrites": [
     {
-      "src": "/",
-      "dest": "/index.html"
+      "source": "/",
+      "destination": "/index.html"
     },
     {
-      "src": "/admin",
-      "dest": "/admin.html"
+      "source": "/admin",
+      "destination": "/admin.html"
     },
     {
-      "src": "/property-form",
-      "dest": "/property-form.html"
+      "source": "/property-form",
+      "destination": "/property-form.html"
     },
     {
-      "src": "/test",
-      "dest": "/test-supabase.html"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/$1"
+      "source": "/test",
+      "destination": "/test-supabase.html"
     }
   ],
   "headers": [
@@ -46,9 +42,5 @@
         }
       ]
     }
-  ],
-  "env": {
-    "NEXT_PUBLIC_SUPABASE_URL": "@supabase_url",
-    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "@supabase_anon_key"
-  }
+  ]
 }
